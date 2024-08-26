@@ -4,9 +4,9 @@ extends XRInterfaceExtension
 
 func _trigger_haptic_pulse(
 	action_name: String,
-	tracker_name: StringName,
-	frequency: float,
-	amplitude: float,
-	duration_sec: float,
-	delay_sec: float) -> void:
+	_tracker_name: StringName,
+	_frequency: float,
+	_amplitude: float,
+	_duration_sec: float,
+	_delay_sec: float) -> void:
 	print("Haptic: ", action_name)

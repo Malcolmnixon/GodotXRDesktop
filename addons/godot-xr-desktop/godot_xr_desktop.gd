@@ -115,12 +115,19 @@ func _input(event: InputEvent) -> void:
 	# Skip if not active
 	if not _active:
 		return
-	
+
 	# Handle rotation by right-mouse-drag
 	var motion := event as InputEventMouseMotion
 	if motion and motion.button_mask & MOUSE_BUTTON_MASK_RIGHT:
-		_head_position.basis = Basis(Vector3.UP, -motion.relative.x * 0.001) * _head_position.basis
-		_head_position.basis = Basis(_head_position.basis.x, -motion.relative.y * 0.001) * _head_position.basis
+		# Apply rotation
+		_head_position.basis = Basis(
+			Vector3.UP,
+			-motion.relative.x * 0.001) * _head_position.basis
+
+		# Apply elevation
+		_head_position.basis = Basis(
+			_head_position.basis.x,
+			-motion.relative.y * 0.001) * _head_position.basis
 
 	# Handle mouse capture and mouse-wheel movement in/out
 	var button := event as InputEventMouseButton
@@ -202,10 +209,10 @@ func _update_poses() -> void:
 	# Set the head default pose
 	_head_tracker.set_pose(
 		"default",
-		 _head_position,
-		 Vector3.ZERO,
-		 Vector3.ZERO,
-		 XRPose.XR_TRACKING_CONFIDENCE_HIGH)
+		_head_position,
+		Vector3.ZERO,
+		Vector3.ZERO,
+		XRPose.XR_TRACKING_CONFIDENCE_HIGH)
 
 	# Set the left controller pose
 	var left_hand := _head_position
