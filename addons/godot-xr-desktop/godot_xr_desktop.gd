@@ -122,7 +122,7 @@ func _input(event: InputEvent) -> void:
 		# Apply rotation
 		_head_position.basis = Basis(
 			Vector3.UP,
-			 -motion.relative.x * 0.001) * _head_position.basis
+			-motion.relative.x * 0.001) * _head_position.basis
 
 		# Apply elevation
 		_head_position.basis = Basis(
