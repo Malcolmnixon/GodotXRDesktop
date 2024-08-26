@@ -25,5 +25,5 @@ jobs:
 
       - name: Lint Godot XR Desktop
         run: |
-          gdlint addons/godot_xr_desktop
+          gdlint addons/godot-xr-desktop
 
