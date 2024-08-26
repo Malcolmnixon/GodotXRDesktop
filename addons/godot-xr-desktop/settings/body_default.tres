@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="GodotXRDesktopBodySettings" load_steps=2 format=3 uid="uid://bfb81c464x35m"]
+
+[ext_resource type="Script" path="res://addons/godot-xr-desktop/settings/body_settings.gd" id="1_iuf4n"]
+
+[resource]
+script = ExtResource("1_iuf4n")
+height_standing = 1.8
+height_crouching = 1.4
