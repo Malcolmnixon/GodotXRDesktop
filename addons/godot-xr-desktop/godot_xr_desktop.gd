@@ -67,6 +67,12 @@ var _right_controller_tracker : XRControllerTracker
 # Head position
 var _head_position : Transform3D = Transform3D.IDENTITY
 
+# Head pitch angle (radians)
+var _pitch : float = 0.0
+
+# Head yaw angle (radians)
+var _yaw : float = 0.0
+
 
 # This method tries to auto-start the XR Desktop experience if enabled. Note
 # that this approach is a fall-back and the preferred approach is for the
@@ -87,6 +93,9 @@ func _physics_process(delta: float) -> void:
 		set_physics_process(false)
 		return
 
+	# Process the inputs
+	input_settings.process(_left_controller_tracker, _right_controller_tracker)
+
 	# Handle physical crouching
 	if Input.is_action_pressed("physical_crouch"):
 		_head_position.origin.y = body_settings.height_crouching
@@ -96,14 +105,24 @@ func _physics_process(delta: float) -> void:
 	# Handle physical movement
 	var forward := _get_forward() * body_settings.physical_move_speed * delta
 	var left := forward.rotated(Vector3.UP, PI/2)
-	if Input.is_action_pressed("physical_move_forwards"):
-		_head_position.origin += forward
-	if Input.is_action_pressed("physical_move_backwards"):
-		_head_position.origin -= forward
-	if Input.is_action_pressed("physical_move_left"):
-		_head_position.origin += left
-	if Input.is_action_pressed("physical_move_right"):
-		_head_position.origin -= left
+	_head_position.origin += forward * Input.get_axis(
+		"physical_move_backwards",
+		"physical_move_forwards")
+	_head_position.origin += left * Input.get_axis(
+		"physical_move_right",
+		"physical_move_left")
+
+	# Handle looking around
+	var look_scale := body_settings.look_speed * delta
+	_pitch += Input.get_axis("head_down", "head_up") * look_scale
+	_yaw += Input.get_axis("head_right", "head_left") * look_scale
+	_pitch = clampf(_pitch, -PI/2, PI/2)
+	_yaw = fmod(_yaw, 2 * PI)
+
+	# Set the look
+	_head_position.basis = Basis.IDENTITY \
+		.rotated(Vector3.LEFT, _pitch) \
+		.rotated(Vector3.UP, _yaw)
 
 	# Update the poses
 	_update_poses()
@@ -119,15 +138,8 @@ func _input(event: InputEvent) -> void:
 	# Handle rotation by right-mouse-drag
 	var motion := event as InputEventMouseMotion
 	if motion and motion.button_mask & MOUSE_BUTTON_MASK_RIGHT:
-		# Apply rotation
-		_head_position.basis = Basis(
-			Vector3.UP,
-			-motion.relative.x * 0.001) * _head_position.basis
-
-		# Apply elevation
-		_head_position.basis = Basis(
-			_head_position.basis.x,
-			-motion.relative.y * 0.001) * _head_position.basis
+		_pitch += motion.relative.y * 0.001
+		_yaw -= motion.relative.x * 0.001
 
 	# Handle mouse capture and mouse-wheel movement in/out
 	var button := event as InputEventMouseButton

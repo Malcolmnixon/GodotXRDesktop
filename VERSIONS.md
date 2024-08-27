@@ -1,2 +1,3 @@
 # 0.1.0
-- Research phase
+- Initial Revision
+- Added Input Driving
