@@ -1,6 +1,40 @@
-[gd_resource type="Resource" script_class="GodotXRDesktopInputSettings" load_steps=2 format=3 uid="uid://bd2bue3twaclx"]
+[gd_resource type="Resource" script_class="GodotXRDesktopInputSettings" load_steps=10 format=3 uid="uid://bd2bue3twaclx"]
 
+[ext_resource type="Script" path="res://addons/godot-xr-desktop/inputs/input.gd" id="1_2y7jo"]
 [ext_resource type="Script" path="res://addons/godot-xr-desktop/settings/input_settings.gd" id="1_r37mc"]
+[ext_resource type="Script" path="res://addons/godot-xr-desktop/inputs/input_pressed.gd" id="2_rkvm1"]
+[ext_resource type="Script" path="res://addons/godot-xr-desktop/inputs/input_vector.gd" id="3_1aw24"]
+
+[sub_resource type="Resource" id="Resource_o3xen"]
+script = ExtResource("2_rkvm1")
+input_action = &"left_grip"
+xr_action = &"grip"
+
+[sub_resource type="Resource" id="Resource_tn8x0"]
+script = ExtResource("2_rkvm1")
+input_action = &"left_trigger"
+xr_action = &"trigger_click"
+
+[sub_resource type="Resource" id="Resource_ueo5s"]
+script = ExtResource("3_1aw24")
+input_positive_x = &"left_joystick_right"
+input_negative_x = &"left_joystick_left"
+input_positive_y = &"left_joystick_up"
+input_negative_y = &"left_joystick_down"
+input_deadzone = -1.0
+xr_action = &"primary"
+
+[sub_resource type="Resource" id="Resource_uwufy"]
+script = ExtResource("2_rkvm1")
+input_action = &"right_grip"
+xr_action = &"grip"
+
+[sub_resource type="Resource" id="Resource_t5spp"]
+script = ExtResource("2_rkvm1")
+input_action = &"right_trigger"
+xr_action = &"trigger_click"
 
 [resource]
 script = ExtResource("1_r37mc")
+left_inputs = Array[ExtResource("1_2y7jo")]([SubResource("Resource_o3xen"), SubResource("Resource_tn8x0"), SubResource("Resource_ueo5s")])
+right_inputs = Array[ExtResource("1_2y7jo")]([SubResource("Resource_uwufy"), SubResource("Resource_t5spp")])
